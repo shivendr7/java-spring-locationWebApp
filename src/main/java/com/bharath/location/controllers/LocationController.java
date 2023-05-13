@@ -1,5 +1,6 @@
 package com.bharath.location.controllers;
 
+import com.bharath.location.LocationwebApplication;
 import com.bharath.location.entities.Location;
 import com.bharath.location.service.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -51,6 +53,15 @@ public class LocationController {
         List<Location> locations = service.getAllLocations();
         modelMap.addAttribute("locations", locations);
         return "displayLocations";
+    }
+
+    @RequestMapping("deleteLocations")
+    public String deleteLocation(@RequestParam("id") int id) {
+        // RequestParam annotation fetches the parameter 'id' from the request url
+
+        Location location = service.getLocationById(id);
+        service.deleteLocation(location);
+        return "displayLocation";
     }
 
 }
