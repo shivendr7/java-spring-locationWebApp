@@ -55,13 +55,15 @@ public class LocationController {
         return "displayLocations";
     }
 
-    @RequestMapping("deleteLocations")
-    public String deleteLocation(@RequestParam("id") int id) {
+    @RequestMapping("deleteLocation")
+    public String deleteLocation(@RequestParam("id") int id, ModelMap modelMap) {
         // RequestParam annotation fetches the parameter 'id' from the request url
 
         Location location = service.getLocationById(id);
         service.deleteLocation(location);
-        return "displayLocation";
+        List<Location> locations = service.getAllLocations();
+        modelMap.addAttribute("locations", locations);
+        return "displayLocations";
     }
 
 }
