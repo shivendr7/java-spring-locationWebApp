@@ -2,8 +2,11 @@ package com.bharath.location.controllers;
 
 import com.bharath.location.LocationwebApplication;
 import com.bharath.location.entities.Location;
+import com.bharath.location.repository.LocationRepository;
 import com.bharath.location.service.LocationService;
 import com.bharath.location.util.EmailUtil;
+import com.bharath.location.util.ReportUtil;
+import jakarta.servlet.ServletContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -21,7 +24,16 @@ public class LocationController {
     LocationService service;
 
     @Autowired
+    LocationRepository repository;
+
+    @Autowired
     EmailUtil emailUtil;
+
+    @Autowired
+    ReportUtil reportUtil;
+
+    @Autowired
+    ServletContext sc;
 
     @RequestMapping("/showCreate")
     public String showCreate() {
@@ -90,4 +102,13 @@ public class LocationController {
         return "displayLocations";
     }
 
+    @RequestMapping("/generateReport")
+    public String generateReport() {
+
+        // we will store jpeg image at this path (location)
+        String path = sc.getRealPath("/");
+        List<Object[]> data = repository.findTypeAndTypeCount();
+        reportUtil.generatePieChart(path, data);
+        return "report";
+    }
 }
